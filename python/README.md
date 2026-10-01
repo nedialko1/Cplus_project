@@ -21,15 +21,18 @@ $O(\log~n)$
 time per element using a balanced two-heap architecture.
 * **Input:** A sequential data stream 
 ```math
-$\text{data\_stream} = [ x_1, x_2, \dots, x_n ]$
+\text{data\_stream} = [ x_1, x_2, \dots, x_n ]
 ```
 where each ingested value $\text{num} \in \mathbb{R}$.
 * **Output:** Per-element return tuple 
-$(\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+$
+```math
+(\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+$
+```
 
 ### State Initialization
 
-```math \begin{matrix}
+```math 
+\begin{matrix}
 
 \text{max\_heap} \leftarrow []
 \\
@@ -42,7 +45,8 @@ $(\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+$
 
 For an incoming value $\text{num}$:
 
-```math \begin{matrix}
+```math 
+\begin{matrix}
 
 \text{if } \neg\text{max\_heap} \lor \text{num} \le -\text{max\_heap}[0] \implies \text{heappush}(\text{max\_heap}, -\text{num})
 \\
