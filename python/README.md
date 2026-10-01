@@ -8,7 +8,7 @@
 
 * **Typing Model:** Dynamic and implicit. Variables require no declarations; containers accept arbitrary objects governed by Python's runtime object model.
 * **Heap Abstraction:** Python lacks a native standalone binary heap class. 
-For instance, the `heapq` module provides procedural min-heap functions operating on standard dynamic lists (`list`). Max-heap behavior is simulated via explicit value negation (\(\text{-num}\)).
+For instance, the `heapq` module provides procedural min-heap functions operating on standard dynamic lists (`list`). Max-heap behavior is simulated via explicit value negation $\text{-num}$.
 * **Returning tuples:** Implicit tuple allocation and unpacking (`return running_val, elapsed_ms`), relying on dynamic object packing.
 
 ---
@@ -32,13 +32,13 @@ where each ingested value $\text{num} \in \mathbb{R}$.
 ### State Initialization
 
 ```math
-\(\begin{matrix}
+\begin{matrix}
 
 \text{max\_heap} \leftarrow []
 \\
 \text{min\_heap} \leftarrow []
 
-\end{matrix}\)
+\end{matrix}
 ```
 
 ### Step 1: Heap Selection & Insertion
@@ -46,13 +46,13 @@ where each ingested value $\text{num} \in \mathbb{R}$.
 For an incoming value $\text{num}$:
 
 ```math
-\(\begin{matrix}
+\begin{matrix}
 
 \text{if } \neg\text{max\_heap} \lor \text{num} \le -\text{max\_heap}[0] \implies \text{heappush}(\text{max\_heap}, -\text{num})
 \\
 \text{else} \implies \text{heappush}(\text{min\_heap}, \text{num})
 
-\end{matrix}\)
+\end{matrix}
 ``` 
 
 ### Step 2: Size Invariant & Rebalancing
@@ -60,7 +60,7 @@ For an incoming value $\text{num}$:
 Maintain invariant 
 
 ```math
-\(\begin{matrix}
+\begin{matrix}
 
 |\text{max\_heap}| \in \{|\text{min\_heap}|, |\text{min\_heap}| + 1\}:
 \\
@@ -69,26 +69,26 @@ Maintain invariant
 \text{elif } \text{len}(\text{min\_heap}) > \text{len}(\text{max\_heap}) \implies \text{val} \leftarrow 
 \text{heappop}(\text{min\_heap}), \; \text{heappush}(\text{max\_heap}, -\text{val})
 
-\end{matrix}\)
+\end{matrix}
 ``` 
 
 ### Step 3: Running Statistic Computation
 
 ```math
 
-\(\begin{matrix}
+\begin{matrix}
 
 \text{running\_val} = \frac{-\text{max\_heap}[0] + \text{min\_heap}[0]}{2.0} \quad (\text{if sizes are equal})
 \\
 \text{running\_val} = -\text{max\_heap}[0] \quad (\text{otherwise})
 
-\end{matrix}\)
+\end{matrix}
 ```
 
 ### Step 4: Timing, Return, and Stream Loop
 
 ```math
-\(\begin{matrix}
+\begin{matrix}
 
 \text{elapsed\_ms} = (\text{perf\_counter}() - t_{\text{start}}) \times 1000.0
 \\
@@ -96,7 +96,7 @@ Maintain invariant
 \\
 \forall x_i \in \text{data\_stream}: (\text{res}, \text{t\_ms}) \leftarrow \text{insert}(x_i)
 
-\end{matrix}\)
+\end{matrix}
 ``` 
 ---
 
