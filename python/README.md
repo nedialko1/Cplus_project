@@ -110,10 +110,10 @@ Maintain invariant
 
 ```mermaid
 graph TD
-    classDef container fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
-    classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000;
-    classDef rebalance fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000;
-    classDef returnDomain fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000;
+    classDef container fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1;
+    classDef logic fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20;
+    classDef rebalance fill:#FFF3E0,stroke:#EF6C00,stroke-width:2px,color:#E65100;
+    classDef returnDomain fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C;
 
     A["Incoming Stream Value: num"]:::container --> B{"Max-Heap Empty OR<br/>num <= -max_heap[0]?"}:::logic
     
