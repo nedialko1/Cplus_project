@@ -117,28 +117,25 @@ graph TD
 
     A["Incoming Stream Value: num"]:::container --> B{"Max-Heap Empty OR<br/>num <= -max_heap[0]?"}:::logic
     
-    B -- "Yes" --> C["Push Negated Value to Max-Heap<br/>heappush(max_heap, -num)"]:::container
-    B -- "No" --> D["Push Value to Min-Heap<br/>heappush(min_heap, num)"]:::container
+    B -- "Yes" --> C["heappush(max_heap, -num)"]:::container
+    B -- "No" --> D["heappush(min_heap, num)"]:::container
     
-    C --> E["Merge / Proceed to Invariant Check"]:::logic
-    D --> E
+    C --> E{"|max_heap| > |min_heap| + 1?"}:::logic
+    D --> F{"|min_heap| > |max_heap|?"}:::logic
     
-    E --> F{"|max_heap| > |min_heap| + 1?"}:::logic
-    F -- "Yes" --> G["Pop Max-Heap, Negate,<br/>Push to Min-Heap"]:::rebalance
-    F -- "No" --> H{"|min_heap| > |max_heap|?"}:::logic
+    E -- "Yes" --> G["val = -heappop(max_heap)<br/>heappush(min_heap, val)"]:::rebalance
+    F -- "Yes" --> H["val = heappop(min_heap)<br/>heappush(max_heap, -val)"]:::rebalance
     
-    G --> I["Unified Size Invariant Satisfied"]:::logic
-    H -- "Yes" --> J["Pop Min-Heap, Negate,<br/>Push to Max-Heap"]:::rebalance
-    H -- "No" --> I
-    J --> I
+    E -- "No" --> I{"Sizes Equal?<br/>|max_heap| == |min_heap|"}:::logic
+    G --> I
+    F -- "No" --> I
+    H --> I
     
-    I --> K{"Sizes Equal?<br/>|max_heap| == |min_heap|"}:::logic
+    I -- "Yes" --> J["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
+    I -- "No" --> K["Extract Median:<br/>-max_top"]:::container
     
-    K -- "Yes" --> L["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
-    K -- "No" --> M["Extract Median:<br/>-max_top"]:::container
-    
-    L --> N["Measure High-Res Timer &<br/>Return Implicit Tuple (val, ms)"]:::returnDomain
-    M --> N
+    J --> L["Measure Timer & Return Tuple<br/>(running_val, elapsed_ms)"]:::returnDomain
+    K --> L
     
     H -- "Yes" --> I["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
     H -- "No" --> J["Extract Median:<br/>-max_top"]:::container
