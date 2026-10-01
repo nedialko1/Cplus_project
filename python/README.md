@@ -20,9 +20,7 @@ For instance, the `heapq` module provides procedural min-heap functions operatin
 $O(\log~n)$ 
 time per element using a balanced two-heap architecture.
 * **Input:** A sequential data stream 
-```math
-\text{data\_stream} = [ x_1, x_2, \dots, x_n ]
-```
+$\text{data\_stream} = [ x_1, x_2, \dots, x_n ]$
 where each ingested value $\text{num} \in \mathbb{R}$.
 * **Output:** Per-element return tuple 
 ```math
