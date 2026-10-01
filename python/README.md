@@ -21,62 +21,46 @@ For instance, the `heapq` module provides procedural min-heap functions operatin
 * **Output:** Per-element return tuple $(\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+$ (via implicit tuple unpacking).
 
 ### State Initialization
-$$\text{max\_heap} \leftarrow [] \quad (\text{simulated max-heap via negated values})$$
-$$\text{min\_heap} \leftarrow [] \quad (\text{standard min-heap})$$
+$$
+\text{max\_heap} \leftarrow [] \quad (\text{simulated max-heap via negated values})
+$$
+$$
+\text{min\_heap} \leftarrow [] \quad (\text{standard min-heap})
+$$
 
 ### Step 1: Heap Selection & Insertion
 For an incoming value $\text{num}$:
-$$\text{if } \neg\text{max\_heap} \lor \text{num} \le -\text{max\_heap}[0] \implies \text{heappush}(\text{max\_heap}, -\text{num})$$
-$$\text{else} \implies \text{heappush}(\text{min\_heap}, \text{num})$$
+$$
+\text{if } \neg\text{max\_heap} \lor \text{num} \le -\text{max\_heap}[0] \implies \text{heappush}(\text{max\_heap}, -\text{num})
+$$
+$$
+\text{else} \implies \text{heappush}(\text{min\_heap}, \text{num})
+$$
 
 ### Step 2: Size Invariant & Rebalancing
-Maintain invariant $\vert{}\text{max\_heap}\vert{} \in \{\vert{}\text{min\_heap}\vert{}, \vert{}\text{min\_heap}\vert{} + 1\}$:
-$$\text{if } \text{len}(\text{max\_heap}) > \text{len}(\text{min\_heap}) + 1 \implies \text{val} \leftarrow -\text{heappop}(\text{max\_heap}), \; \text{heappush}(\text{min\_heap}, \text{val})$$
-$$\text{elif } \text{len}(\text{min\_heap}) > \text{len}(\text{max\_heap}) \implies \text{val} \leftarrow \text{heappop}(\text{min\_heap}), \; \text{heappush}(\text{max\_heap}, -\text{val})$$
+Maintain invariant $|\text{max\_heap}| \in \{|\text{min\_heap}|, |\text{min\_heap}| + 1\}$:
+$$
+\text{if } \text{len}(\text{max\_heap}) > \text{len}(\text{min\_heap}) + 1 \implies \text{val} \leftarrow -\text{heappop}(\text{max\_heap}), \; \text{heappush}(\text{min\_heap}, \text{val})
+$$
+$$
+\text{elif } \text{len}(\text{min\_heap}) > \text{len}(\text{max\_heap}) \implies \text{val} \leftarrow \text{heappop}(\text{min\_heap}), \; \text{heappush}(\text{max\_heap}, -\text{val})
+$$
 
 ### Step 3: Running Statistic Computation
-$$\text{running\_val} = \begin{cases} \frac{-\text{max\_heap}[0] + \text{min\_heap}[0]}{2.0} & \text{if } \text{len}(\text{max\_heap}) == \text{len}(\text{min\_heap}) \\ -\text{max\_heap}[0] & \text{otherwise} \end{cases}$$
+$$
+\text{running\_val} = \begin{cases} 
+\frac{-\text{max\_heap}[0] + \text{min\_heap}[0]}{2.0} & \text{if } \text{len}(\text{max\_heap}) == \text{len}(\text{min\_heap}) \\ 
+-\text{max\_heap}[0] & \text{otherwise} 
+\end{cases}
+$$
 
 ### Step 4: Timing, Return, and Stream Loop
-$$\text{elapsed\_ms} = (\text{perf\_counter}() - t_{\text{start}}) \times 1000.0$$
-$$\text{return } (\text{running\_val}, \text{elapsed\_ms})$$
-$$\forall x_i \text{ in } \text{data\_stream}: (\text{res}, \text{t\_ms}) \leftarrow \text{insert}(x_i)$$
-
----
-
-## Flowchart
-
-> **Color-Coding Guide (Anticipating C++ Evolutions):**
-> * 🟦 **Blue Nodes:** Container & Memory Management (Mapped to C++ STL Containers / Adapters)
-> * 🟩 **Green Nodes:** Predicates & Selection Logic (Mapped to C++ Concepts / Type Constraints)
-> * 🟧 **Orange Nodes:** Rebalancing & State Transformation (Mapped to C++ Move Semantics / Swap Operations)
-> * 🟪 **Purple Nodes:** Return Domain & Unpacking (Mapped to C++ Structured Bindings / Typed Structs)
-
-```mermaid
-graph TD
-    classDef container fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
-    classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000;
-    classDef rebalance fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000;
-    classDef returnDomain fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000;
-
-    A["Incoming Stream Value: num"]:::container --> B{"Max-Heap Empty OR<br/>num <= -max_heap[0]?"}:::logic
-    
-    B -- "Yes" --> C["Push Negated Value to Max-Heap<br/>heappush(max_heap, -num)"]:::container
-    B -- "No" --> D["Push Value to Min-Heap<br/>heappush(min_heap, num)"]:::container
-    
-    C --> E{"Size Invariant Check:<br/>|max_heap| > |min_heap| + 1?"}:::logic
-    D --> F{"Size Invariant Check:<br/>|min_heap| > |max_heap|?"}:::logic
-    
-    E -- "Yes" --> G["Pop Max-Heap, Negate,<br/>Push to Min-Heap"]:::rebalance
-    F -- "Yes" --> E2["Pop Min-Heap, Negate,<br/>Push to Max-Heap"]:::rebalance
-    
-    E -- "No" --> H{"Sizes Equal?"}:::logic
-    F -- "No" --> H
-    G --> H
-    E2 --> H
-    
-    H -- "Yes" --> I["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
-    H -- "No" --> J["Extract Median:<br/>-max_top"]:::container
-    
-    I --> K["Measure High-Res Timer &<br/>Return Implicit Tuple (val, ms)"]:::returnDomain
-    J --> K
+$$
+\text{elapsed\_ms} = (\text{perf\_counter}() - t_{\text{start}}) \times 1000.0
+$$
+$$
+\text{return } (\text{running\_val}, \text{elapsed\_ms})
+$$
+$$
+\forall x_i \text{ in } \text{data\_stream}: (\text{res}, \text{t\_ms}) \leftarrow \text{insert}(x_i)
+$$
