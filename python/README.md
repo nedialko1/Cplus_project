@@ -20,6 +20,12 @@ For instance, the `heapq` module provides procedural min-heap functions operatin
 * **Input:** A sequential data stream $\text{data\_stream} = [x_1, x_2, \dots, x_n]$, where each ingested value $\text{num} \in \mathbb{R}$.
 * **Output:** Per-element return tuple $(\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+$.
 
+## Pseudocode: 
+
+* **Purpose:** Compute the running median of a data stream in $O(\log n)$ time per element using a balanced two-heap architecture.
+* **Input:** A sequential data stream $\text{data\_stream} = [x_1, x_2, \dots, x_n]$, where each ingested value $\text{num} \in \mathbb{R}$.
+* **Output:** Per-element return tuple $(\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+$.
+
 ### State Initialization
 
 $$
@@ -77,3 +83,43 @@ $$
 $$
 \forall x_i \in \text{data\_stream}: (\text{res}, \text{t\_ms}) \leftarrow \text{insert}(x_i)
 $$
+
+
+---
+
+## Flowchart
+
+> **Color-Coding Guide (Anticipating C++ Evolutions):**
+> * 🟦 **Blue Nodes:** Container & Memory Management (Mapped to C++ STL Containers / Adapters)
+> * 🟩 **Green Nodes:** Predicates & Selection Logic (Mapped to C++ Concepts / Type Constraints)
+> * 🟧 **Orange Nodes:** Rebalancing & State Transformation (Mapped to C++ Move Semantics / Swap Operations)
+> * 🟪 **Purple Nodes:** Return Domain & Unpacking (Mapped to C++ Structured Bindings / Typed Structs)
+
+```mermaid
+graph TD
+    classDef container fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000;
+    classDef rebalance fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000;
+    classDef returnDomain fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000;
+
+    A["Incoming Stream Value: num"]:::container --> B{"Max-Heap Empty OR<br/>num <= -max_heap[0]?"}:::logic
+    
+    B -- "Yes" --> C["Push Negated Value to Max-Heap<br/>heappush(max_heap, -num)"]:::container
+    B -- "No" --> D["Push Value to Min-Heap<br/>heappush(min_heap, num)"]:::container
+    
+    C --> E{"Size Invariant Check:<br/>|max_heap| > |min_heap| + 1?"}:::logic
+    D --> F{"Size Invariant Check:<br/>|min_heap| > |max_heap|?"}:::logic
+    
+    E -- "Yes" --> G["Pop Max-Heap, Negate,<br/>Push to Min-Heap"]:::rebalance
+    F -- "Yes" --> E2["Pop Min-Heap, Negate,<br/>Push to Max-Heap"]:::rebalance
+    
+    E -- "No" --> H{"Sizes Equal?"}:::logic
+    F -- "No" --> H
+    G --> H
+    E2 --> H
+    
+    H -- "Yes" --> I["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
+    H -- "No" --> J["Extract Median:<br/>-max_top"]:::container
+    
+    I --> K["Measure High-Res Timer &<br/>Return Implicit Tuple (val, ms)"]:::returnDomain
+    J --> K
