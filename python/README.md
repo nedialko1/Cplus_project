@@ -20,15 +20,20 @@ For instance, the `heapq` module provides procedural min-heap functions operatin
 $O(\log~n)$ 
 time per element using a balanced two-heap architecture.
 * **Input:** A sequential data stream 
-$$\text{data\_stream} = \[x_1, x_2, \dots, x_n\]$$, where each ingested value $\text{num} \in \mathbb{R}$.
+```math
+\text{data\_stream} = \[x_1, x_2, \dots, x_n\]
+```
+where each ingested value $\text{num} \in \mathbb{R}$.
 * **Output:** Per-element return tuple 
-$$(\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+$$.
+```math
+(\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+
+```
 
 ### State Initialization
 
 ```math
 \text{max\_heap} \leftarrow []
-\
+\\
 \text{min\_heap} \leftarrow []
 ```
 
@@ -39,7 +44,7 @@ For an incoming value $\text{num}$:
 ```math
 
 \text{if } \neg\text{max\_heap} \lor \text{num} \le -\text{max\_heap}[0] \implies \text{heappush}(\text{max\_heap}, -\text{num})
-
+\\
 \text{else} \implies \text{heappush}(\text{min\_heap}, \text{num})
 
 ``` 
@@ -50,10 +55,11 @@ Maintain invariant
 
 ```math
 |\text{max\_heap}| \in \{|\text{min\_heap}|, |\text{min\_heap}| + 1\}:
-
+\\
 \text{if } \text{len}(\text{max\_heap}) > \text{len}(\text{min\_heap}) + 1 \implies \text{val} \leftarrow -\text{heappop}(\text{max\_heap}), \; \text{heappush}(\text{min\_heap}, \text{val})
-
-\text{elif } \text{len}(\text{min\_heap}) > \text{len}(\text{max\_heap}) \implies \text{val} \leftarrow \text{heappop}(\text{min\_heap}), \; \text{heappush}(\text{max\_heap}, -\text{val})
+\\
+\text{elif } \text{len}(\text{min\_heap}) > \text{len}(\text{max\_heap}) \implies \text{val} \leftarrow 
+\text{heappop}(\text{min\_heap}), \; \text{heappush}(\text{max\_heap}, -\text{val})
 
 ``` 
 
@@ -61,13 +67,9 @@ Maintain invariant
 
 ```math
 
-$$
 \text{running\_val} = \frac{-\text{max\_heap}[0] + \text{min\_heap}[0]}{2.0} \quad (\text{if sizes are equal})
-$$
-
-$$
+\\
 \text{running\_val} = -\text{max\_heap}[0] \quad (\text{otherwise})
-$$
 
 ```
 
@@ -75,17 +77,11 @@ $$
 
 ```math
 
-$$
 \text{elapsed\_ms} = (\text{perf\_counter}() - t_{\text{start}}) \times 1000.0
-$$
-
-$$
+\\
 \text{return } (\text{running\_val}, \text{elapsed\_ms})
-$$
-
-$$
+\\
 \forall x_i \in \text{data\_stream}: (\text{res}, \text{t\_ms}) \leftarrow \text{insert}(x_i)
-$$
 
 ``` 
 ---
