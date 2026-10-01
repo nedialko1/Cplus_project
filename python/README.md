@@ -120,16 +120,25 @@ graph TD
     B -- "Yes" --> C["Push Negated Value to Max-Heap<br/>heappush(max_heap, -num)"]:::container
     B -- "No" --> D["Push Value to Min-Heap<br/>heappush(min_heap, num)"]:::container
     
-    C --> E{"Size Invariant Check:<br/>|max_heap| > |min_heap| + 1?"}:::logic
-    D --> F{"Size Invariant Check:<br/>|min_heap| > |max_heap|?"}:::logic
+    C --> E["Merge / Proceed to Invariant Check"]:::logic
+    D --> E
     
-    E -- "Yes" --> G["Pop Max-Heap, Negate,<br/>Push to Min-Heap"]:::rebalance
-    F -- "Yes" --> E2["Pop Min-Heap, Negate,<br/>Push to Max-Heap"]:::rebalance
+    E --> F{"|max_heap| > |min_heap| + 1?"}:::logic
+    F -- "Yes" --> G["Pop Max-Heap, Negate,<br/>Push to Min-Heap"]:::rebalance
+    F -- "No" --> H{"|min_heap| > |max_heap|?"}:::logic
     
-    E -- "No" --> H{"Sizes Equal?"}:::logic
-    F -- "No" --> H
-    G --> H
-    E2 --> H
+    G --> I["Unified Size Invariant Satisfied"]:::logic
+    H -- "Yes" --> J["Pop Min-Heap, Negate,<br/>Push to Max-Heap"]:::rebalance
+    H -- "No" --> I
+    J --> I
+    
+    I --> K{"Sizes Equal?<br/>|max_heap| == |min_heap|"}:::logic
+    
+    K -- "Yes" --> L["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
+    K -- "No" --> M["Extract Median:<br/>-max_top"]:::container
+    
+    L --> N["Measure High-Res Timer &<br/>Return Implicit Tuple (val, ms)"]:::returnDomain
+    M --> N
     
     H -- "Yes" --> I["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
     H -- "No" --> J["Extract Median:<br/>-max_top"]:::container
