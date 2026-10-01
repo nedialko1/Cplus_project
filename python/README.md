@@ -16,14 +16,25 @@ For instance, the `heapq` module provides procedural min-heap functions operatin
 # 1. The **`streaming_stats`** app
 
 ## Pseudocode: 
-* **Purpose:** Compute the running median of a data stream in \(O(\log n)\) time per element using a balanced two-heap architecture.
-* **Input:** A sequential data stream \(\text{data\_stream} =\) \[x_1, x_2, \dots, x_n\]\$, where each ingested value \(\text{num} \in \mathbb{R}\).
-* **Output:** Per-element return tuple \((\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+\).
+* **Purpose:** Compute the running median of a data stream in 
+```math
+\(O(\log n)\) 
+```
+time per element using a balanced two-heap architecture.
+* **Input:** A sequential data stream 
+```math
+\(\text{data\_stream} =\) \[x_1, x_2, \dots, x_n\]\$, where each ingested value \(\text{num} \in \mathbb{R}\).
+```
+* **Output:** Per-element return tuple 
+```math
+\((\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+\).
+```
 
 ### State Initialization
 
 ```math
 \text{max\_heap} \leftarrow []
+
 \text{min\_heap} \leftarrow []
 ```
 
@@ -33,13 +44,9 @@ For an incoming value $\text{num}$:
 
 ```math
 
-$$
 \text{if } \neg\text{max\_heap} \lor \text{num} \le -\text{max\_heap}[0] \implies \text{heappush}(\text{max\_heap}, -\text{num})
-$$
 
-$$
 \text{else} \implies \text{heappush}(\text{min\_heap}, \text{num})
-$$
 
 ``` 
 
@@ -48,15 +55,11 @@ $$
 Maintain invariant 
 
 ```math
-$|\text{max\_heap}| \in \{|\text{min\_heap}|, |\text{min\_heap}| + 1\}$:
+|\text{max\_heap}| \in \{|\text{min\_heap}|, |\text{min\_heap}| + 1\}:
 
-$$
 \text{if } \text{len}(\text{max\_heap}) > \text{len}(\text{min\_heap}) + 1 \implies \text{val} \leftarrow -\text{heappop}(\text{max\_heap}), \; \text{heappush}(\text{min\_heap}, \text{val})
-$$
 
-$$
 \text{elif } \text{len}(\text{min\_heap}) > \text{len}(\text{max\_heap}) \implies \text{val} \leftarrow \text{heappop}(\text{min\_heap}), \; \text{heappush}(\text{max\_heap}, -\text{val})
-$$
 
 ``` 
 
