@@ -17,24 +17,18 @@ For instance, the `heapq` module provides procedural min-heap functions operatin
 
 ## Pseudocode: 
 * **Purpose:** Compute the running median of a data stream in 
-```math
-\(O(\log n)\) 
-```
+$\(O(\log n)\)$ 
 time per element using a balanced two-heap architecture.
 * **Input:** A sequential data stream 
-```math
-\(\text{data\_stream} =\) \[x_1, x_2, \dots, x_n\]\$, where each ingested value \(\text{num} \in \mathbb{R}\).
-```
+$\(\text{data\_stream} =\) \[x_1, x_2, \dots, x_n\]$, where each ingested value $\(\text{num} \in \mathbb{R}\)$.
 * **Output:** Per-element return tuple 
-```math
-\((\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+\).
-```
+$\((\text{running\_val}, \text{elapsed\_ms}) \in \mathbb{R} \times \mathbb{R}^+\)$.
 
 ### State Initialization
 
 ```math
 \text{max\_heap} \leftarrow []
-
+\
 \text{min\_heap} \leftarrow []
 ```
 
