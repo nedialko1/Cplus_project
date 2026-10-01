@@ -23,14 +23,8 @@ For instance, the `heapq` module provides procedural min-heap functions operatin
 ### State Initialization
 
 ```math
-
-$$
 \text{max\_heap} \leftarrow []
-$$
-
-$$
 \text{min\_heap} \leftarrow []
-$$
 ```
 
 ### Step 1: Heap Selection & Insertion
@@ -51,9 +45,10 @@ $$
 
 ### Step 2: Size Invariant & Rebalancing
 
-Maintain invariant $|\text{max\_heap}| \in \{|\text{min\_heap}|, |\text{min\_heap}| + 1\}$:
+Maintain invariant 
 
 ```math
+$|\text{max\_heap}| \in \{|\text{min\_heap}|, |\text{min\_heap}| + 1\}$:
 
 $$
 \text{if } \text{len}(\text{max\_heap}) > \text{len}(\text{min\_heap}) + 1 \implies \text{val} \leftarrow -\text{heappop}(\text{max\_heap}), \; \text{heappush}(\text{min\_heap}, \text{val})
