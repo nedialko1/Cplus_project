@@ -120,26 +120,22 @@ graph TD
     B -- "Yes" --> C["heappush(max_heap, -num)"]:::container
     B -- "No" --> D["heappush(min_heap, num)"]:::container
     
-    C --> E{"|max_heap| > |min_heap| + 1?"}:::logic
-    D --> F{"|min_heap| > |max_heap|?"}:::logic
+    C --> E
+    D --> E{"|max_heap| > |min_heap| + 1?"}:::logic
     
-    E -- "Yes" --> G["val = -heappop(max_heap)<br/>heappush(min_heap, val)"]:::rebalance
-    F -- "Yes" --> H["val = heappop(min_heap)<br/>heappush(max_heap, -val)"]:::rebalance
+    E -- "Yes" --> F["val = -heappop(max_heap)<br/>heappush(min_heap, val)"]:::rebalance
+    E -- "No" --> G{"|min_heap| > |max_heap|?"}:::logic
     
-    E -- "No" --> I{"Sizes Equal?<br/>|max_heap| == |min_heap|"}:::logic
-    G --> I
-    F -- "No" --> I
-    H --> I
+    F --> H["Invariant Satisfied"]:::logic
+    G -- "Yes" --> I["val = heappop(min_heap)<br/>heappush(max_heap, -val)"]:::rebalance
+    G -- "No" --> H
+    I --> H
     
-    I -- "Yes" --> J["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
-    I -- "No" --> K["Extract Median:<br/>-max_top"]:::container
+    H --> J{"Sizes Equal?<br/>|max_heap| == |min_heap|"}:::logic
     
-    J --> L["Measure Timer & Return Tuple<br/>(running_val, elapsed_ms)"]:::returnDomain
-    K --> L
+    J -- "Yes" --> K["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
+    J -- "No" --> L["Extract Median:<br/>-max_top"]:::container
     
-    H -- "Yes" --> I["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
-    H -- "No" --> J["Extract Median:<br/>-max_top"]:::container
-    
-    I --> K["Measure High-Res Timer &<br/>Return Implicit Tuple (val, ms)"]:::returnDomain
-    J --> K
+    K --> M["Measure Timer & Return Tuple<br/>(running_val, elapsed_ms)"]:::returnDomain
+    L --> M
 ```    
