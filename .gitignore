@@ -1,0 +1,57 @@
+# ==========================================
+# C++ Build Artifacts & Binaries
+# ==========================================
+build/
+bin/
+lib/
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.lib
+*.dylib
+*.so
+
+# ==========================================
+# CMake Generated Files
+# ==========================================
+CMakeCache.txt
+CMakeFiles/
+cmake-build-*/
+*.cmake
+install_manifest.txt
+
+# ==========================================
+# Python Artifacts & Virtual Environments
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+*.egg-info/
+dist/
+
+# ==========================================
+# IDEs & Editors (JetBrains / VS Code)
+# ==========================================
+.idea/
+.vscode/
+*.iml
+*.suo
+*.user
+*.code-workspace
+
+# ==========================================
+# OS-Specific Files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

@@ -102,40 +102,58 @@ Maintain invariant
 
 ## Flowchart
 
-> **Color-Coding Guide (Anticipating C++ Evolutions):**
-> * 🟦 **Blue Nodes:** Container & Memory Management (Mapped to C++ STL Containers / Adapters)
-> * 🟩 **Green Nodes:** Predicates & Selection Logic (Mapped to C++ Concepts / Type Constraints)
-> * 🟧 **Orange Nodes:** Rebalancing & State Transformation (Mapped to C++ Move Semantics / Swap Operations)
-> * 🟪 **Purple Nodes:** Return Domain & Unpacking (Mapped to C++ Structured Bindings / Typed Structs)
+### **Color-Coding Guide (Anticipating matches to C++ Evolution)**
+
+🟦 **Blue Nodes (Important Facilitatory Paradigm):** 
+* *Role:* Architectural patterns and STL container adapters (e.g., standard `std::priority_queue` configuration, underlying vector storage).
+
+🟩 **Green Nodes (Progress with Memory Safety & Compile-Time Validation):** 
+* *Role:* Modern C++ features (C++20/23 Concepts, type constraints, move semantics safety, and compile-time validation).
+
+🟥 **Red Nodes (Critical Shortcomings / Workarounds):** 
+* *Role:* Legacy boilerplates, manual memory management traps, or custom comparator workarounds that higher C++ standards eliminate.
+
+🟨 **Yellow Nodes (Usual Stuff / Standard Operational Logic):** 
+* *Role:* Baseline procedural execution steps (size checks, standard element swaps, invariant branch checks).
 
 ```mermaid
 graph TD
-    classDef container fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1;
-    classDef logic fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20;
-    classDef rebalance fill:#FFF3E0,stroke:#EF6C00,stroke-width:2px,color:#E65100;
-    classDef returnDomain fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C;
+    classDef safety fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#00FF00,font-size:13px,font-weight:bold;
+    classDef paradigm fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0000FF,font-size:13px,font-weight:bold;
+    classDef shortcoming fill:#FFEBEE,stroke:#C62828,stroke-width:2px,color:#FF0000,font-size:13px,font-weight:bold;
+    classDef usual fill:#FFFDE7,stroke:#FBC02D,stroke-width:2px,color:#0000FF,font-size:13px,font-weight:bold;
 
-    A["Incoming Stream Value: num"]:::container --> B{"Max-Heap Empty OR<br/>num <= -max_heap[0]?"}:::logic
-    
-    B -- "Yes" --> C["heappush(max_heap, -num)"]:::container
-    B -- "No" --> D["heappush(min_heap, num)"]:::container
-    
-    C --> E
-    D --> E{"|max_heap| > |min_heap| + 1?"}:::logic
-    
-    E -- "Yes" --> F["val = -heappop(max_heap)<br/>heappush(min_heap, val)"]:::rebalance
-    E -- "No" --> G{"|min_heap| > |max_heap|?"}:::logic
-    
-    F --> H["Invariant Satisfied"]:::logic
-    G -- "Yes" --> I["val = heappop(min_heap)<br/>heappush(max_heap, -val)"]:::rebalance
-    G -- "No" --> H
-    I --> H
-    
-    H --> J{"Sizes Equal?<br/>|max_heap| == |min_heap|"}:::logic
-    
-    J -- "Yes" --> K["Compute Median:<br/>(-max_top + min_top) / 2.0"]:::container
-    J -- "No" --> L["Extract Median:<br/>-max_top"]:::container
-    
-    K --> M["Measure Timer & Return Tuple<br/>(running_val, elapsed_ms)"]:::returnDomain
-    L --> M
+    subgraph Ingestion ["1. Stream Ingestion & Heap Routing"]
+        A([Incoming Stream Value: num]):::paradigm --> B{"max_heap empty OR<br/>num <= -max_heap[0]?"}:::usual
+        
+        B -- "Yes" --> C[("heappush(max_heap, -num)")]:::shortcoming
+        B -- "No" --> D[("heappush(min_heap, num)")]:::usual
+    end
+
+    subgraph Rebalance ["2. Size Invariant Rebalancing"]
+        C --> E
+        D --> E{"|max_heap| > |min_heap| + 1?"}:::usual
+        
+        E -- "Yes" --> F["val = -heappop(max_heap)<br/>heappush(min_heap, val)"]:::shortcoming
+        E -- "No" --> G{"|min_heap| > |max_heap|?"}:::usual
+        
+        F --> H["Invariant Satisfied"]:::usual
+        G -- "Yes" --> I["val = heappop(min_heap)<br/>heappush(max_heap, -val)"]:::shortcoming
+        G -- "No" --> H
+        I --> H
+    end
+
+    subgraph Extraction ["3. Median Extraction & Return"]
+        H --> J{"|max_heap| == |min_heap|?"}:::usual
+        
+        J -- "Yes" --> K["Median = (-max_top + min_top) / 2.0"]:::usual
+        J -- "No" --> L["Median = -max_top"]:::usual
+        
+        K --> M([Return Tuple: running_val, elapsed_ms]):::paradigm
+        L --> M
+    end
+
+    style Ingestion fill:#EAEAEA,stroke:#BDBDBD,stroke-width:2px,color:#000000,font-size:16px,font-weight:bold;
+    style Rebalance fill:#EAEAEA,stroke:#BDBDBD,stroke-width:2px,color:#000000,font-size:16px,font-weight:bold;
+    style Extraction fill:#EAEAEA,stroke:#BDBDBD,stroke-width:2px,color:#000000,font-size:16px,font-weight:bold;
 ```    
